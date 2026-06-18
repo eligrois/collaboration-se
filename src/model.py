@@ -133,8 +133,8 @@ class DereverbModule(pl.LightningModule):
         pred_wav = ri_to_wav(pred_ri, self.window_size, self.overlap, self.cut_first_freq)
 
         # SI-SDR improvement loss (minimize = maximize improvement)
-        input_sisdr = si_sdr(input_wav, target_wav)
-        pred_sisdr = si_sdr(pred_wav, target_wav)
+        input_sisdr = si_sdr(input_wav, target_wav, eps_log_ref=1e-20, eps_log_err=1e-12)
+        pred_sisdr = si_sdr(pred_wav, target_wav, eps_log_ref=1e-20, eps_log_err=1e-12)
         loss = input_sisdr - pred_sisdr
 
         self.log("si_sdr_improvement", pred_sisdr - input_sisdr, prog_bar=True)

@@ -8,33 +8,48 @@ import numpy as np
 EPSILON = 1e-8
 
 
-def si_sdr(estimate: torch.Tensor, reference: torch.Tensor) -> torch.Tensor:
+
+def si_sdr(
+    estimate: torch.Tensor, 
+    reference: torch.Tensor, 
+    eps_scale: float = EPSILON, 
+    eps_log_ref: float = EPSILON, 
+    eps_log_err: float = EPSILON
+) -> torch.Tensor:
     """Scale-Invariant Signal-to-Distortion Ratio (SI-SDR).
 
     Args:
-        estimate:  (B, L) or (1, L)
+        estimate: (B, L) or (1, L)
         reference: (B, L) or (1, L)
+        eps_scale: Small value to prevent division by zero during scaling.
+        eps_log_ref: Small value to prevent log10(0) for the reference signal power.
+        eps_log_err: Small value to prevent log10(0) for the error signal power.
 
     Returns:
         SI-SDR in dB, scalar tensor.
     """
+    # Zero-mean normalization
     estimate = estimate - estimate.mean(dim=-1, keepdim=True)
     reference = reference - reference.mean(dim=-1, keepdim=True)
 
+    # Calculate optimal scaling factor
     ref_pow = reference.pow(2).mean(dim=-1, keepdim=True)
     mix_pow = (estimate * reference).mean(dim=-1, keepdim=True)
-    scale = mix_pow / (ref_pow + EPSILON)
+    scale = mix_pow / (ref_pow + eps_scale)
 
+    # Project estimate onto reference
     ref_scaled = scale * reference
     error = estimate - ref_scaled
 
+    # Compute component powers
     ref_scaled_pow = ref_scaled.pow(2).mean(dim=-1)
     error_pow = error.pow(2).mean(dim=-1)
 
-    si_sdr_val = (10 * torch.log10(ref_scaled_pow + 1e-8)
-                  - 10 * torch.log10(error_pow + 1e-8))
+    # Calculate final SI-SDR in dB
+    si_sdr_val = (10 * torch.log10(ref_scaled_pow + eps_log_ref)
+                  - 10 * torch.log10(error_pow + eps_log_err))
+                  
     return si_sdr_val.mean()
-
 
 def compute_pesq(estimate: np.ndarray, reference: np.ndarray, sample_rate: int = 16000):
     """Compute PESQ score. Requires the `pesq` package."""

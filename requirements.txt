@@ -1,0 +1,16 @@
+# Core
+torch>=2.0
+torchaudio>=2.0
+pytorch-lightning>=2.0
+numpy
+scipy
+soundfile
+librosa
+
+# Evaluation metrics
+pesq
+pystoi
+tabulate
+
+# Dataset generation
+rir-generator
