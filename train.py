@@ -28,7 +28,7 @@ from src.dataset import DereverbDataModule
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Train the dereverberation model")
-    parser.add_argument("--data_root", type=str, default='/mount/data/ajal/solan/data/singapore_dereverb', help="Path to dataset root")
+    parser.add_argument("--data_root", type=str, default='/mount/data/ajal/speech_enhancement/data/singapore_dereverb', help="Path to dataset root")
     parser.add_argument("--model_dir", type=str, default=None, help="Directory to save checkpoints")
     parser.add_argument("--end2end_ckpt", type=str, default=None,
                         help="End-to-end checkpoint to load weights from. If not given, trains from scratch.")

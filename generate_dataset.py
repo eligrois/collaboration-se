@@ -35,8 +35,8 @@ from scipy.io.wavfile import write as wav_write
 from scipy.spatial import distance
 
 EPSILON = 1e-6
-NOISE_DATASETS = ["/mount/data/ajal/solan/data/whamr/",
-                  "/mount/data/ajal/solan/data/dns_noise/",
+NOISE_DATASETS = ["/mount/data/ajal/speech_enhancement/data/whamr/",
+                  "/mount/data/ajal/speech_enhancement/data/dns_noise/",
 ]
 
 # ── Configuration ────────────────────────────────────────────────────────────
@@ -225,7 +225,7 @@ def generate_single_sample(sample_idx, speech_files, noise_files, args, save_dir
         reverberation_time=beta,
     ))
 
-    # Apply RIR
+    # Apply RIR - mathematical part that convolution of clean signal with RIR
     reverbed = apply_rir(clean_signal, h)
 
     # Add noise

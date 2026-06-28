@@ -64,7 +64,7 @@ All audio: 16 kHz, 512-sample FFT, 256-sample hop.
 ## Project Structure
 
 ```
-solan/
+speech_enhancement/
 ├── conf/config.py              # All configuration parameters
 ├── src/
 │   ├── architectures.py        # Neural network definitions
@@ -256,7 +256,7 @@ tensorboard --logdir ./models/lightning_logs
 
 ## Step 4: Evaluate
 
-### Solan-format test set (grouped by RT60 × SNR)
+### format test set (grouped by RT60 × SNR)
 
 ```bash
 python evaluate.py --test_dir /path/to/test_data

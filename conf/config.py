@@ -10,8 +10,8 @@ Edit the values below to match your setup, then run:
 import os
 from dataclasses import dataclass, field
 
-# Resolve paths relative to the solan project root (parent of conf/)
-_SOLAN_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Resolve paths relative to the speech enhancement project root (parent of conf/)
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 @dataclass
@@ -33,7 +33,7 @@ class Config:
     # End-to-end checkpoint (for evaluation / test / resume training)
     # Default: baseline checkpoint shipped with the repo
     # If the file does not exist and no CLI override, trains from scratch
-    end2end_ckpt: str = os.path.join(_SOLAN_ROOT, "models", "checkpoints", "baseline.ckpt")
+    end2end_ckpt: str = os.path.join(_PROJECT_ROOT, "models", "checkpoints", "baseline.ckpt")
 
     # Unfreeze spec2spec for joint finetuning (default: frozen)
     unfreeze_spec2spec: bool = True
@@ -63,9 +63,9 @@ class Config:
     lr_scheduler_factor: float = 0.5  # factor for ReduceLROnPlateau
     warmup_epochs: int = 0  # linear warmup epochs
 
-    # ── Output paths (relative to solan root) ─────────────────────────────
-    model_dir: str = os.path.join(_SOLAN_ROOT, "models")
-    results_dir: str = os.path.join(_SOLAN_ROOT, "results")
+    # ── Output paths (relative to project root) ─────────────────────────────
+    model_dir: str = os.path.join(_PROJECT_ROOT, "models")
+    results_dir: str = os.path.join(_PROJECT_ROOT, "results")
 
     # ── Evaluation ────────────────────────────────────────────────────────
     eval_max_samples: int = 20  # number of samples from val set for evaluation

@@ -3,7 +3,7 @@
 Evaluate the dereverberation model on a test set.
 
 Supports two data layouts:
-  1. "solan" layout (default):
+  1. layout (default):
        <test_dir>/clean/{index}_clean.wav
        <test_dir>/dirty_samples/IR-{RT60}s_SNR-[{lo},{hi}]/{index}_dirty.wav
 
@@ -43,13 +43,13 @@ from src.metrics import si_sdr, compute_pesq, compute_stoi
 
 
 # ── Default test set path ──────────────────────────────────────────────────
-DEFAULT_TEST_DIR = '/mount/data/ajal/solan_audio_samples/audio/'
+DEFAULT_TEST_DIR = '/mount/data/ajal/audio_samples/audio/'
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Evaluate dereverberation model")
     parser.add_argument("--test_dir", type=str, default=DEFAULT_TEST_DIR,
-                        help="Path to solan-format test directory (clean/ + dirty_samples/)")
+                        help="Path to format test directory (clean/ + dirty_samples/)")
     parser.add_argument("--end2end_ckpt", type=str, default=None)
     parser.add_argument("--results_dir", type=str, default=None)
     parser.add_argument("--eval_max_samples", type=int, default=None,
@@ -169,8 +169,8 @@ def format_val(v):
     return v
 
 
-# ── Collect pairs for solan-format test set ──────────────────────────────
-def collect_solan_pairs(test_dir, max_samples=None):
+# ── Collect pairs for test set ──────────────────────────────
+def collect_pairs(test_dir, max_samples=None):
     """Return list of (condition_name, rt60, snr, dirty_path, clean_path)."""
     clean_dir = os.path.join(test_dir, "clean")
     dirty_dir = os.path.join(test_dir, "dirty_samples")
@@ -288,7 +288,7 @@ def main():
         pairs = collect_legacy_pairs(data_root, args.split, args.eval_max_samples)
         data_source = os.path.join(data_root, args.split)
     else:
-        pairs = collect_solan_pairs(args.test_dir, args.eval_max_samples)
+        pairs = collect_pairs(args.test_dir, args.eval_max_samples)
         data_source = args.test_dir
 
     print(f"\nEvaluating {len(pairs)} samples from: {data_source}")
